@@ -77,7 +77,7 @@
 
 
 	SaltBot image: http://imgur.com/k5xUgjw
-
+	Neural Network: https://github.com/libfann/fann
 
 
 	Functions: 
