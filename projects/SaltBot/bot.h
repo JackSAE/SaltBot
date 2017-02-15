@@ -22,6 +22,8 @@ public:
 	kf::Xor128 m_rand;
 	BotInitialData m_initialData;
 	kf::Vector2 dir;
+
+
 };
 
 
