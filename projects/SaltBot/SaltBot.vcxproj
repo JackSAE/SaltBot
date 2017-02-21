@@ -11,12 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AiMethods.cpp" />
     <ClCompile Include="bot.cpp" />
     <ClCompile Include="initalizeFANN.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AiMethods.h" />
     <ClInclude Include="bot.h" />
     <ClInclude Include="initalizeFANN.h" />
   </ItemGroup>

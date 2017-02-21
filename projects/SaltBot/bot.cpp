@@ -1,8 +1,14 @@
 #include "bot.h"
 #include "time.h"
 #include "fann.h"
-#include "AiMethods.h"
-
+#define _USE_MATH_DEFINES
+#include <cmath> 
+#include <math.h>
+#include <algorithm>
+#include <iterator>
+#include <iostream>
+#include <set>
+#include <string>  
 
 /*
 
@@ -151,7 +157,6 @@
 
 */
 
-
 extern "C"
 {
 	BotInterface27 BOT_API *CreateBot27()
@@ -172,67 +177,125 @@ Blank::~Blank()
 void Blank::init(const BotInitialData &initialData, BotAttributes &attrib)
 {
 
-
+	m_updateCount = 0;
+	m_lastEnemyUpdateCount = -1;
 	m_initialData = initialData;
-	attrib.health=1.0;
-	attrib.motor=1.0;
-	attrib.weaponSpeed=3.0;
-	attrib.weaponStrength=2.0;
-	dir.set(0, 1);
-	
-
+	attrib.health = 10.0;
+	attrib.motor = 1.0;
+	attrib.weaponSpeed = 3.0;
+	attrib.weaponStrength = 5.0;
+	//dir.set(m_rand.norm()*2.0 - 1.0, m_rand.norm()*2.0 - 1.0);
+	m_ourLastPos.set(1, 0);
+	m_moveTarget.set(m_rand() % (m_initialData.mapData.width - 2) + 1.5, m_rand() % (m_initialData.mapData.width - 2) + 1.5);
+	m_scanAngle = 0;
 
 }
 
 void Blank::update(const BotInput &input, BotOutput27 &output)
 {
+	bool spotted = false;
 
-
-
-	
-
-
-
-
-
-
-
-	//Moving 
-	output.moveDirection = dir;
-	//output.moveDirection.set(1, 0);
-	//output.moveDirection.set(m_rand.norm()*2.0-1.0, m_rand.norm()*2.0-1.0);
-	output.motor = 1.0;
-
-	output.lookDirection.set(1);
-
-
-
-	dir.set(m_rand() * 2 + 1, m_rand() * 2 + 1);
-
-
-	//Scanning 
-	if (input.scanResult.size() > 0) 
+	// First update
+	if (m_updateCount == 0)
 	{
+		output.lines.clear();
+		output.text.clear();
+	}
 
-		char buf[100];
-		printf(buf, "%d", dir);
-		output.text.push_back(TextMsg(buf, input.position - kf::Vector2(0.0f, 1.0f), 0.0f, 0.7f, 1.0f, 80));
+	if (input.scanResult.size() > 0)
+	{
+		for (int i = 0; i < input.scanResult.size(); ++i)
+		{
+			if (input.scanResult[i].type == VisibleThing::e_robot)
+			{
+				m_currentEnemyPos = input.scanResult[i].position;
+				spotted = true;
 
-		output.action = BotOutput::shoot;
-
+				break;
+			}
+		}
 	}
 
 
+	// Movement
+	output.moveDirection = m_moveTarget - input.position;
+	if (output.moveDirection.length() < 2)
+	{
+		m_moveTarget.set(m_rand() % (m_initialData.mapData.width - 2) + 1.5, m_rand() % (m_initialData.mapData.width - 2) + 1.5);
+	}
+	output.motor = 1.0;
 
 
+	if (spotted)
+	{
+		kf::Vector2 estimatedEnemyPosition = m_currentEnemyPos;
+		if (m_lastEnemyUpdateCount>-1)
+		{
+			kf::Vector2 delta = m_currentEnemyPos - m_lastEnemyPos;
+			estimatedEnemyPosition = m_currentEnemyPos + (delta / (m_updateCount - m_lastEnemyUpdateCount)) * 5;
+			Line l;
+			l.start = m_currentEnemyPos;
+			l.end = estimatedEnemyPosition;
+			l.r = 1;
+			l.g = 1;
+			l.b = 1;
+			output.lines.push_back(l);
+		}
+
+		// Shooting
+		output.lookDirection = estimatedEnemyPosition - input.position;
+		output.moveDirection = output.lookDirection;
+		m_moveTarget = estimatedEnemyPosition;
+		output.action = BotOutput::shoot;
+		m_scanAngle -= m_initialData.scanFOV * 3;
+		if (hitBot)
+		{
+			output.moveDirection.set(90, 90);
+			output.motor = 3;
+			output.moveDirection.set(270, 270.0f);
+			output.motor = 3;
+		}
+	}
+	else
+	{
+		// Scanning
+		m_scanAngle += m_initialData.scanFOV * 2;
+		output.lookDirection.set(cos(m_scanAngle), sin(m_scanAngle));
+		output.action = BotOutput::scan;
+	}
+
+
+	// Debugging lines. Render a trail behind us.
+	if (m_updateCount > 0)
+	{
+		Line l;
+		l.start = input.position;
+		l.end = m_ourLastPos;
+		l.r = 1;
+		l.g = 0;
+		l.b = 0;
+		output.lines.push_back(l);
+	}
+
+	// How to change sprite frames (if the sprite has more than 1)
 	//output.spriteFrame = (output.spriteFrame+1)%2;
-	output.text.clear();
 
 
-	char buf[100];
-	printf(buf, "%d", dir);
-	output.text.push_back(TextMsg(buf, input.position - kf::Vector2(0.0f, 1.0f), 0.0f, 0.7f, 1.0f,80));
+	// How to render text on the screen.
+	//output.text.clear();
+	//char buf[100];
+	//sprintf(buf, "%d", input.health);
+	//output.text.push_back(TextMsg(buf, input.position - kf::Vector2(0.0f, 1.0f), 0.0f, 0.7f, 1.0f, 80));
 
+
+	// Remember values for the next update.
+	m_ourLastPos = input.position;
+	if (spotted)
+	{
+		m_lastEnemyUpdateCount = m_updateCount;
+		m_lastEnemyPos = m_currentEnemyPos;
+	}
+	m_updateCount++;
 }
 
 void Blank::result(bool won)
@@ -241,5 +304,10 @@ void Blank::result(bool won)
 
 void Blank::bulletResult(bool hit)
 {
-
+	if (hit)
+	{
+		hitBot = true;
+	}
+	else
+		hitBot = false;
 }

@@ -28,7 +28,7 @@ void initalizeFANN::GetTrainingData()
 
 
 }
-
+/*
 void initalizeFANN::TrainFromFile(unsigned int max_neurons, const char* training_file, const char* testing_file, const char* output_file)
 {
 	//Sets how the neural network is going to be trained.
@@ -93,7 +93,7 @@ void initalizeFANN::TrainFromFile(unsigned int max_neurons, const char* training
 	fann_destroy(ann);
 
 }
-
+*/
 void initalizeFANN::SetupTraining()
 {
 	//Used to initalize the files.
