@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bottymcbotface", "projects\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SaltBot", "projects\SaltBot\SaltBot.vcxproj", "{7C243BDB-691C-4453-8BCE-FC50EBB5C917}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "blankpath", "projects\blankpath\blankpath.vcxproj", "{E496A5BE-7687-414D-935A-361119943E7B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,10 @@ Global
 		{7C243BDB-691C-4453-8BCE-FC50EBB5C917}.Debug|x64.Build.0 = Debug|x64
 		{7C243BDB-691C-4453-8BCE-FC50EBB5C917}.Release|x64.ActiveCfg = Release|x64
 		{7C243BDB-691C-4453-8BCE-FC50EBB5C917}.Release|x64.Build.0 = Release|x64
+		{E496A5BE-7687-414D-935A-361119943E7B}.Debug|x64.ActiveCfg = Debug|x64
+		{E496A5BE-7687-414D-935A-361119943E7B}.Debug|x64.Build.0 = Debug|x64
+		{E496A5BE-7687-414D-935A-361119943E7B}.Release|x64.ActiveCfg = Release|x64
+		{E496A5BE-7687-414D-935A-361119943E7B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,5 +57,6 @@ Global
 		{3DFA53DF-7DE3-4714-B4E8-1A42F8E0F186} = {72534CB8-F183-455E-ABEA-969A5D349AA9}
 		{1F20CA50-EFCF-4C94-9474-E6DCA7C64678} = {72534CB8-F183-455E-ABEA-969A5D349AA9}
 		{7C243BDB-691C-4453-8BCE-FC50EBB5C917} = {72534CB8-F183-455E-ABEA-969A5D349AA9}
+		{E496A5BE-7687-414D-935A-361119943E7B} = {72534CB8-F183-455E-ABEA-969A5D349AA9}
 	EndGlobalSection
 EndGlobal
