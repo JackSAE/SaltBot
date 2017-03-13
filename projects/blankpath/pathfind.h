@@ -5,13 +5,6 @@
 
 typedef kf::Vector2T<int> NodePos;
 
-class AStar
-{
-public:
-	void FindPath(kf::Vector2T<int> currentPos, kf::Vector2T<int> targetPos);
-
-};
-
 class Node
 {
 public:
@@ -29,6 +22,7 @@ public:
 	NodePos parent; //THe node we came from
 	NodeState state; 
 
+	float heuristic(NodePos node, NodePos goal, int D);
 	Node();
 	void clear();
 };

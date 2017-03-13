@@ -69,3 +69,11 @@ Node &Map::operator[](const kf::Vector2 &np)
 	return getNode(np);
 }
 
+
+float Node::heuristic(NodePos node, NodePos goal,int D)
+{
+	auto dx = abs(node.x - goal.x);
+	auto dy = abs(node.y - goal.y);
+
+	return D * (dx + dy);
+}
