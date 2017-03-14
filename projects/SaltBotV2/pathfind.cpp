@@ -41,8 +41,10 @@ void Map::clear()
 
 void Map::init(int width, int height)
 {
-	m_nodes.resize(width*height);
-	clear();
+    m_width = width;
+    m_height = height;
+    m_nodes.resize(width*height);
+    clear();
 }
 	
 Node &Map::getNode(const NodePos &np)

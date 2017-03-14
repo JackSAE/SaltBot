@@ -24,7 +24,10 @@ public:
 	std::vector<NodePos> openList;
 	NodePos destNode;
 	Node n_node;
+	NodePos startPos;
 	Map m_map;
+	
+	kf::Vector2		m_moveTarget;
 
 	bool pathFound = false;
 	bool firstLoop = true;

@@ -1,4 +1,5 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(368,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  initalizeFANN.cpp
   bot.cpp
 d:\github\saltbot\projects\saltbot\bot.cpp(170): warning C4311: 'type cast': pointer truncation from 'Blank *const ' to 'int'
 d:\github\saltbot\projects\saltbot\bot.cpp(170): warning C4302: 'type cast': truncation from 'Blank *const ' to 'int'
@@ -6,5 +7,7 @@ d:\github\saltbot\projects\saltbot\bot.cpp(170): warning C4244: 'argument': conv
 d:\github\saltbot\projects\saltbot\bot.cpp(189): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 d:\github\saltbot\projects\saltbot\bot.cpp(224): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 d:\github\saltbot\projects\saltbot\bot.cpp(235): warning C4244: 'argument': conversion from 'int' to 'const float', possible loss of data
+  Generating Code...
+     Creating library D:\GitHub\SaltBot\temp\Debug\SaltBot\SaltBot_d.lib and object D:\GitHub\SaltBot\temp\Debug\SaltBot\SaltBot_d.exp
   SaltBot.vcxproj -> D:\GitHub\SaltBot\bin\data\bots\SaltBot\SaltBot_d.dll
   SaltBot.vcxproj -> D:\GitHub\SaltBot\bin\data\bots\SaltBot\SaltBot_d.pdb (Full PDB)
