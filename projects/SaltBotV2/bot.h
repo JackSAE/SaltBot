@@ -19,7 +19,9 @@ public:
 	virtual void update(const BotInput &input, BotOutput27 &output);
 	virtual void result(bool won);
 	virtual void bulletResult(bool hit);
-	void aSTAR(const BotInput &input, BotOutput27 &output);
+	bool aSTAR(NodePos startpos, NodePos destPos, int D);
+	void PushToCSV();
+
 
 	std::vector<NodePos> openList;
 	NodePos destNode;
@@ -28,7 +30,14 @@ public:
 	Map m_map;
 	
 	kf::Vector2		m_moveTarget;
+	kf::Vector2 m_currentEnemyPos;
+	kf::Vector2 m_lastEnemyPos;
 
+	float m_scanAngle;
+	int m_lastEnemyUpdateCount;
+	bool spotted = false;
+	int bulletCount;
+	int m_updateCount;
 	bool pathFound = false;
 	bool firstLoop = true;
 	int vectorIt = 0;

@@ -27,11 +27,11 @@ void Blank::init(const BotInitialData &initialData, BotAttributes &attrib)
 	attrib.motor=1.0;
 	attrib.weaponSpeed=1.0;
 	attrib.weaponStrength=1.0;
-	dir.set(1, 0);
-	m_map.init(initialData.mapData.width, initialData.mapData.height);
-	m_moveTarget.set(m_rand() % (m_initialData.mapData.width - 2) + 1.5, m_rand() % (m_initialData.mapData.width - 2) + 1.5);
+
+	m_lastEnemyUpdateCount = -1;
 
 	m_map.init(initialData.mapData.width, initialData.mapData.height);
+
 	for (int y = 0; y<m_map.m_height; ++y)
 	{
 		for (int x = 0; x<m_map.m_width; ++x)
@@ -40,94 +40,172 @@ void Blank::init(const BotInitialData &initialData, BotAttributes &attrib)
 		}
 	}
 
+	destNode = NodePos(1, 1);
+	m_scanAngle = 0;
 }
 
 void Blank::update(const BotInput &input, BotOutput27 &output)
 {
-	output.moveDirection = dir;
+
 	output.motor = 1.0;
-	output.lookDirection.set(0,1);
+	output.lookDirection = output.moveDirection;
 	output.action = BotOutput::scan;
 
+	// How to render text on the screen.
+	output.text.clear();
+	char buf[100];
+	sprintf(buf, "%f : %f", input.position.x,input.position.y);
+	output.text.push_back(TextMsg(buf, input.position - kf::Vector2(0.0f, 1.0f), 0.0f, 0.7f, 1.0f, 80));
 
-	destNode = m_map.getNode(m_moveTarget).parent;
 
-	aSTAR(input, output);
-
-
-}
-
-void Blank::aSTAR(const BotInput &input, BotOutput27 &output)
-{
-	//Clear Map data
-	if (firstLoop || pathFound == true)
+	if (input.scanResult.size() > 0)
 	{
-		m_map.clear();
+		for (int i = 0; i < input.scanResult.size(); ++i)
+		{
+			if (input.scanResult[i].type == VisibleThing::e_robot)
+			{
+				m_currentEnemyPos = input.scanResult[i].position;
+				bulletCount = m_updateCount + 4;
+				spotted = true;
+
+				break;
+			}
+		}
 	}
 
-	//Find path Loop
-	startPos = NodePos(2, 2);  //m_map.getNode(input.position).parent;
+	aSTAR(destNode, NodePos(input.position.x, input.position.y), 1);
+
+	kf::Vector2 currentPos = input.position;
+	kf::Vector2 moveToPos = kf::convertVector2<kf::Vector2>(m_map.getNode(kf::convertVector2<NodePos>(currentPos)).parent);
+
+	if (moveToPos.x == -1 && moveToPos.y == -1)
+	{
+		destNode.set(m_rand() % (m_initialData.mapData.width - 2) + 1.5, m_rand() % (m_initialData.mapData.width - 2) + 1.5);
+
+		while (m_map.getNode(destNode).wall == true)
+		{
+			destNode.set(m_rand() % (m_initialData.mapData.width - 2) + 1.5, m_rand() % (m_initialData.mapData.width - 2) + 1.5);
+		}
+	}
+	else
+	{
+		dir = moveToPos - currentPos + kf::Vector2(0.5, 0.5);
+		output.moveDirection = dir;
+	}
+
+	output.lines.clear();
+
+
+
+	for (int y = 0; y < m_map.m_height; ++y)
+	{
+		for (int x = 0; x < m_map.m_width; ++x)
+		{
+			Line l;
+			l.start.set(x + 0.5, y + 0.5);
+			l.end.set(kf::convertVector2<kf::Vector2>(m_map.getNode(kf::convertVector2<NodePos>(NodePos(x, y))).parent) + kf::Vector2(0.5, 0.5));
+			if (m_map.getNode(kf::convertVector2<NodePos>(NodePos(x, y))).parent.x == -1)
+				continue;
+			output.lines.push_back(l);
+		}
+	}
+
+	if (spotted)
+	{
+		output.lookDirection = m_currentEnemyPos;
+		output.action = BotOutput::shoot;
+		spotted = false;
+	}
+	else
+	{
+		output.lookDirection = output.moveDirection;
+		output.action = BotOutput::scan;
+	}
+
+	
+}
+
+bool Blank::aSTAR(NodePos startpos, NodePos destPos, int D)
+{
+
+
+	m_map.clear();
 
 	//Add start node to openList 
-	openList.push_back(startPos);
+	openList.push_back(startpos);
 
-	while (!openList.empty() && pathFound == false)
+	while (!openList.empty()/* && pathFound == false*/)
 	{
-		NodePos currentNode = openList.front();
+		auto currentNodePosit = openList.begin();
 
 		for (auto it = openList.begin(); it != openList.end(); ++it)
 		{
 			//Get smallest F value of the nodes... in openlist?
-			if (m_map.getNode(*it).f < m_map.getNode(currentNode).f)
+			if (m_map.getNode(*it).f < m_map.getNode(*currentNodePosit).f)
 			{
-				currentNode = *it;
+				currentNodePosit = it;
 			}
-			++vectorIt;
-			std::cout << vectorIt << std::endl;
 		}
 
-		for (int oy = -1; oy <= 2; ++oy)
+		NodePos currentNodePos = *currentNodePosit;
+		Node &currentNode = m_map.getNode(currentNodePos);
+
+		currentNode.state = Node::StateClosed;
+		openList.erase(currentNodePosit);
+
+
+		for (int oy = -1; oy <= 1; ++oy)
 		{
-			for (int ox = -1; ox <= 2; ++ox)
+			for (int ox = -1; ox <= 1; ++ox)
 			{
 				if (ox == 0 && oy == 0)
 				{
 					continue;
 				}
+				if (ox != 0 && oy != 0)
+				{
+					continue;
+				}
 				NodePos adjacentNodes;
-				adjacentNodes = NodePos(currentNode.x + ox, currentNode.y + oy);
-				//currentPos = adjacentNodes;
+				adjacentNodes = NodePos(currentNodePos.x + ox, currentNodePos.y + oy);
+
+				if (m_map.getNode(adjacentNodes).wall == true)
+				{
+					continue;
+				}
+
 				int n_G = currentNode.g + m_map.getNode(adjacentNodes).c;
-				if (m_map.getNode(adjacentNodes).state == Node::NodeState::StateClosed)
+
+				if (m_map.getNode(adjacentNodes).state == Node::StateClosed)
 				{
-					break; // ?
+					continue; 
 				}
-				else if (m_map.getNode(adjacentNodes).state == Node::NodeState::StateOpen && n_G < m_map.getNode(adjacentNodes).g)
+				else if (m_map.getNode(adjacentNodes).state == Node::StateOpen && n_G < m_map.getNode(adjacentNodes).g)
 				{
 					m_map.getNode(adjacentNodes).g = n_G;
-					m_map.getNode(adjacentNodes).h = n_node.heuristic(adjacentNodes, destNode, 1); //Heuristic;
-					m_map.getNode(adjacentNodes).parent = currentNode;
-					m_map.getNode(adjacentNodes).f = m_map.getNode(adjacentNodes).g + n_node.heuristic(adjacentNodes, destNode, 1);
+					m_map.getNode(adjacentNodes).h = n_node.heuristic(adjacentNodes, destPos, D); //Heuristic;
+					m_map.getNode(adjacentNodes).parent = currentNodePos;
+					m_map.getNode(adjacentNodes).f = m_map.getNode(adjacentNodes).g + n_node.heuristic(adjacentNodes, destPos, D);
 				}
-				else if (m_map.getNode(adjacentNodes).state == Node::NodeState::StateNone)
+				else if (m_map.getNode(adjacentNodes).state == Node::StateNone)
 				{
 					m_map.getNode(adjacentNodes).g = n_G;
-					m_map.getNode(adjacentNodes).h = n_node.heuristic(adjacentNodes, destNode, 1); //Heuristic;
-					m_map.getNode(adjacentNodes).parent = currentNode;
-					m_map.getNode(adjacentNodes).f = m_map.getNode(adjacentNodes).g + n_node.heuristic(adjacentNodes, destNode, 1);
-					m_map.getNode(adjacentNodes).state = Node::NodeState::StateOpen;
+					m_map.getNode(adjacentNodes).h = n_node.heuristic(adjacentNodes, destPos, D); //Heuristic;
+					m_map.getNode(adjacentNodes).parent = currentNodePos;
+					m_map.getNode(adjacentNodes).f = m_map.getNode(adjacentNodes).g + n_node.heuristic(adjacentNodes, destPos, D);
+					m_map.getNode(adjacentNodes).state = Node::StateOpen;
 					openList.push_back(adjacentNodes);
 				}
-				m_map.getNode(currentNode).state = Node::NodeState::StateClosed;
-				openList.erase(openList.begin() + vectorIt); // This is crashing help help help 
-				if (currentNode.x && currentNode.y == destNode.x && destNode.y)
+
+				if (adjacentNodes.x == destPos.x && adjacentNodes.y == destPos.y)
 				{
 					pathFound = true;
-				}
+				}				
 			}
 		}
-
+		
 	}
+	return pathFound;
 
 }
 
@@ -140,4 +218,14 @@ void Blank::bulletResult(bool hit)
 
 }
 
+
+void Blank::PushToCSV()
+{
+	//print all blocks into a csv called AllBlocks.csv
+
+	//Print blocks that i want the bot to be able to move to into AllowedPath.csv
+	//Only allow blocks that are 1-2 Blocks away from a wall to be added.
+
+
+}
 

@@ -12,7 +12,7 @@ void Node::clear()
 	f = 0;
 	g = 0;
 	h = 0;
-	wall = false;
+	//wall = false;
 	parent.set(-1, -1);
 	state = NodeState::StateNone;
 }
@@ -72,7 +72,7 @@ Node &Map::operator[](const kf::Vector2 &np)
 }
 
 
-float Node::heuristic(NodePos node, NodePos goal,int D)
+float Node::heuristic(NodePos node, NodePos goal, int D)
 {
 	auto dx = abs(node.x - goal.x);
 	auto dy = abs(node.y - goal.y);
