@@ -1,10 +1,10 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(368,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
   bot.cpp
-c:\users\jepettit\documents\saltbot\projects\blank27\bot.cpp(14): warning C4311: 'type cast': pointer truncation from 'Blank *const ' to 'int'
-c:\users\jepettit\documents\saltbot\projects\blank27\bot.cpp(14): warning C4302: 'type cast': truncation from 'Blank *const ' to 'int'
-c:\users\jepettit\documents\saltbot\projects\blank27\bot.cpp(14): warning C4244: 'argument': conversion from 'time_t' to 'kf::u32', possible loss of data
-c:\users\jepettit\documents\saltbot\projects\blank27\bot.cpp(43): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\github\saltbot\projects\blank27\bot.cpp(14): warning C4311: 'type cast': pointer truncation from 'Blank *const ' to 'int'
+d:\github\saltbot\projects\blank27\bot.cpp(14): warning C4302: 'type cast': truncation from 'Blank *const ' to 'int'
+d:\github\saltbot\projects\blank27\bot.cpp(14): warning C4244: 'argument': conversion from 'time_t' to 'kf::u32', possible loss of data
+d:\github\saltbot\projects\blank27\bot.cpp(43): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
-     Creating library C:\Users\jepettit\Documents\SaltBot\temp\Debug\blank27\blank27_d.lib and object C:\Users\jepettit\Documents\SaltBot\temp\Debug\blank27\blank27_d.exp
-  blank27.vcxproj -> C:\Users\jepettit\Documents\SaltBot\bin\data\bots\blank27\blank27_d.dll
-  blank27.vcxproj -> C:\Users\jepettit\Documents\SaltBot\bin\data\bots\blank27\blank27_d.pdb (Full PDB)
+     Creating library D:\GitHub\SaltBot\temp\Debug\blank27\blank27_d.lib and object D:\GitHub\SaltBot\temp\Debug\blank27\blank27_d.exp
+  blank27.vcxproj -> D:\GitHub\SaltBot\bin\data\bots\blank27\blank27_d.dll
+  blank27.vcxproj -> D:\GitHub\SaltBot\bin\data\bots\blank27\blank27_d.pdb (Full PDB)

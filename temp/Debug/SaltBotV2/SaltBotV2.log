@@ -1,33 +1,38 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(368,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
   bot.cpp
-c:\users\jepettit\documents\saltbot\projects\saltbotv2\bot.cpp(16): warning C4311: 'type cast': pointer truncation from 'Blank *const ' to 'int'
-c:\users\jepettit\documents\saltbot\projects\saltbotv2\bot.cpp(16): warning C4302: 'type cast': truncation from 'Blank *const ' to 'int'
-c:\users\jepettit\documents\saltbot\projects\saltbotv2\bot.cpp(16): warning C4244: 'argument': conversion from 'time_t' to 'kf::u32', possible loss of data
-c:\users\jepettit\documents\saltbot\projects\saltbotv2\bot.cpp(76): warning C4244: 'argument': conversion from 'const float' to 'int', possible loss of data
-c:\users\jepettit\documents\saltbot\projects\saltbotv2\bot.cpp(83): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\jepettit\documents\saltbot\projects\saltbotv2\bot.cpp(87): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\jepettit\documents\saltbot\projects\saltbotv2\bot.cpp(102): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\jepettit\documents\saltbot\projects\saltbotv2\bot.cpp(57): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+d:\github\saltbot\projects\saltbotv2\bot.cpp(17): warning C4311: 'type cast': pointer truncation from 'Blank *const ' to 'int'
+d:\github\saltbot\projects\saltbotv2\bot.cpp(17): warning C4302: 'type cast': truncation from 'Blank *const ' to 'int'
+d:\github\saltbot\projects\saltbotv2\bot.cpp(17): warning C4244: 'argument': conversion from 'time_t' to 'kf::u32', possible loss of data
+d:\github\saltbot\projects\saltbotv2\bot.cpp(27): warning C4244: '=': conversion from 'kf::u32' to 'float', possible loss of data
+d:\github\saltbot\projects\saltbotv2\bot.cpp(28): warning C4244: '=': conversion from 'kf::u32' to 'float', possible loss of data
+d:\github\saltbot\projects\saltbotv2\bot.cpp(29): warning C4244: '=': conversion from 'kf::u32' to 'float', possible loss of data
+d:\github\saltbot\projects\saltbotv2\bot.cpp(30): warning C4244: '=': conversion from 'kf::u32' to 'float', possible loss of data
+d:\github\saltbot\projects\saltbotv2\bot.cpp(44): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+d:\github\saltbot\projects\saltbotv2\bot.cpp(77): warning C4244: 'argument': conversion from 'const float' to 'int', possible loss of data
+d:\github\saltbot\projects\saltbotv2\bot.cpp(106): warning C4305: 'argument': truncation from 'double' to 'float'
+d:\github\saltbot\projects\saltbotv2\bot.cpp(118): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\github\saltbot\projects\saltbotv2\bot.cpp(58): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
-c:\users\jepettit\documents\saltbot\projects\saltbotv2\bot.cpp(183): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\jepettit\documents\saltbot\projects\saltbotv2\bot.cpp(185): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\jepettit\documents\saltbot\projects\saltbotv2\bot.cpp(190): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\jepettit\documents\saltbot\projects\saltbotv2\bot.cpp(192): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\jepettit\documents\saltbot\dev\sdk\include\kf\kf_vector2.h(527): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-  c:\users\jepettit\documents\saltbot\projects\saltbotv2\bot.cpp(79): note: see reference to function template instantiation 'T1 kf::convertVector2<NodePos,kf::Vector2>(const T2 &)' being compiled
+d:\github\saltbot\projects\saltbotv2\bot.cpp(200): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\github\saltbot\projects\saltbotv2\bot.cpp(202): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\github\saltbot\projects\saltbotv2\bot.cpp(207): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\github\saltbot\projects\saltbotv2\bot.cpp(209): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+d:\github\saltbot\dev\sdk\include\kf\kf_vector2.h(527): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+  d:\github\saltbot\projects\saltbotv2\bot.cpp(80): note: see reference to function template instantiation 'T1 kf::convertVector2<NodePos,kf::Vector2>(const T2 &)' being compiled
           with
           [
               T1=NodePos,
               T2=kf::Vector2
           ]
-c:\users\jepettit\documents\saltbot\dev\sdk\include\kf\kf_vector2.h(528): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
-c:\users\jepettit\documents\saltbot\dev\sdk\include\kf\kf_vector2.h(527): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
-  c:\users\jepettit\documents\saltbot\projects\saltbotv2\bot.cpp(79): note: see reference to function template instantiation 'T1 kf::convertVector2<kf::Vector2,NodePos>(const T2 &)' being compiled
+d:\github\saltbot\dev\sdk\include\kf\kf_vector2.h(528): warning C4244: '=': conversion from 'const float' to 'int', possible loss of data
+d:\github\saltbot\dev\sdk\include\kf\kf_vector2.h(527): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+  d:\github\saltbot\projects\saltbotv2\bot.cpp(80): note: see reference to function template instantiation 'T1 kf::convertVector2<kf::Vector2,NodePos>(const T2 &)' being compiled
           with
           [
               T1=kf::Vector2,
               T2=NodePos
           ]
-c:\users\jepettit\documents\saltbot\dev\sdk\include\kf\kf_vector2.h(528): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
-  SaltBotV2.vcxproj -> C:\Users\jepettit\Documents\SaltBot\bin\data\bots\SaltBotV2\SaltBotV2_d.dll
-  SaltBotV2.vcxproj -> C:\Users\jepettit\Documents\SaltBot\bin\data\bots\SaltBotV2\SaltBotV2_d.pdb (Full PDB)
+d:\github\saltbot\dev\sdk\include\kf\kf_vector2.h(528): warning C4244: '=': conversion from 'const int' to 'float', possible loss of data
+     Creating library D:\GitHub\SaltBot\temp\Debug\SaltBotV2\SaltBotV2_d.lib and object D:\GitHub\SaltBot\temp\Debug\SaltBotV2\SaltBotV2_d.exp
+  SaltBotV2.vcxproj -> D:\GitHub\SaltBot\bin\data\bots\SaltBotV2\SaltBotV2_d.dll
+  SaltBotV2.vcxproj -> D:\GitHub\SaltBot\bin\data\bots\SaltBotV2\SaltBotV2_d.pdb (Full PDB)

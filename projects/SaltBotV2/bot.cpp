@@ -3,6 +3,7 @@
 #include "pathfind.h"
 #include <iostream>
 
+
 extern "C"
 {
 	BotInterface27 BOT_API *CreateBot27()
@@ -23,10 +24,10 @@ Blank::~Blank()
 void Blank::init(const BotInitialData &initialData, BotAttributes &attrib)
 {
 	m_initialData = initialData;
-	attrib.health=1.0;
-	attrib.motor=1.0;
-	attrib.weaponSpeed=1.0;
-	attrib.weaponStrength=1.0;
+	attrib.health = m_rand();
+	attrib.motor = m_rand();
+	attrib.weaponSpeed = m_rand();
+	attrib.weaponStrength = m_rand();
 
 	m_lastEnemyUpdateCount = -1;
 
@@ -40,7 +41,7 @@ void Blank::init(const BotInitialData &initialData, BotAttributes &attrib)
 		}
 	}
 
-	destNode = NodePos(1, 1);
+	destNode = NodePos(23.5, 29.5);
 	m_scanAngle = 0;
 }
 
@@ -78,6 +79,8 @@ void Blank::update(const BotInput &input, BotOutput27 &output)
 	kf::Vector2 currentPos = input.position;
 	kf::Vector2 moveToPos = kf::convertVector2<kf::Vector2>(m_map.getNode(kf::convertVector2<NodePos>(currentPos)).parent);
 
+
+	/*
 	if (moveToPos.x == -1 && moveToPos.y == -1)
 	{
 		destNode.set(m_rand() % (m_initialData.mapData.width - 2) + 1.5, m_rand() % (m_initialData.mapData.width - 2) + 1.5);
@@ -88,31 +91,43 @@ void Blank::update(const BotInput &input, BotOutput27 &output)
 		}
 	}
 	else
+	*/
+	kf::Vector2 pos = input.position;
+	kf::Vector2 destPosVec = kf::Vector2(23.5, 29.5) + kf::Vector2(0.5, 0.5);
+
+	if(!reachedDest)
 	{
 		dir = moveToPos - currentPos + kf::Vector2(0.5, 0.5);
 		output.moveDirection = dir;
 	}
 
-	output.lines.clear();
-
-
-
-	for (int y = 0; y < m_map.m_height; ++y)
+	if (reachedDest)
 	{
-		for (int x = 0; x < m_map.m_width; ++x)
+		output.lookDirection = kf::Vector2(0, 5.7) - input.position;
+	}
+
+	if (debug == true)
+	{
+		output.lines.clear();
+
+		for (int y = 0; y < m_map.m_height; ++y)
 		{
-			Line l;
-			l.start.set(x + 0.5, y + 0.5);
-			l.end.set(kf::convertVector2<kf::Vector2>(m_map.getNode(kf::convertVector2<NodePos>(NodePos(x, y))).parent) + kf::Vector2(0.5, 0.5));
-			if (m_map.getNode(kf::convertVector2<NodePos>(NodePos(x, y))).parent.x == -1)
-				continue;
-			output.lines.push_back(l);
+			for (int x = 0; x < m_map.m_width; ++x)
+			{
+				Line l;
+				l.start.set(x + 0.5, y + 0.5);
+				l.end.set(kf::convertVector2<kf::Vector2>(m_map.getNode(kf::convertVector2<NodePos>(NodePos(x, y))).parent) + kf::Vector2(0.5, 0.5));
+				if (m_map.getNode(kf::convertVector2<NodePos>(NodePos(x, y))).parent.x == -1)
+					continue;
+				output.lines.push_back(l);
+			}
 		}
 	}
 
+
 	if (spotted)
 	{
-		output.lookDirection = m_currentEnemyPos;
+		output.lookDirection = m_currentEnemyPos - input.position;
 		output.action = BotOutput::shoot;
 		spotted = false;
 	}
@@ -128,13 +143,12 @@ void Blank::update(const BotInput &input, BotOutput27 &output)
 bool Blank::aSTAR(NodePos startpos, NodePos destPos, int D)
 {
 
-
 	m_map.clear();
 
 	//Add start node to openList 
 	openList.push_back(startpos);
 
-	while (!openList.empty()/* && pathFound == false*/)
+	while (!openList.empty())
 	{
 		auto currentNodePosit = openList.begin();
 
@@ -219,13 +233,52 @@ void Blank::bulletResult(bool hit)
 }
 
 
-void Blank::PushToCSV()
+void Blank::PushToCSV(const BotInput &input, BotOutput27 &output)
 {
-	//print all blocks into a csv called AllBlocks.csv
+	csvList.push_back(m_map.getNode(input.position).parent);
 
 	//Print blocks that i want the bot to be able to move to into AllowedPath.csv
 	//Only allow blocks that are 1-2 Blocks away from a wall to be added.
+	while (!csvList.empty())
+	{
+		auto currentNodePosit = csvList.begin();
 
+		for (auto it = csvList.begin(); it != csvList.end(); ++it)
+		{
+			currentNodePosit = it;
+		}
 
+		NodePos currentNodePos = *currentNodePosit;
+		Node &currentNode = m_map.getNode(currentNodePos);
+
+		for (int y = 0; y < m_map.m_height; ++y)
+		{
+			for (int x = 0; x < m_map.m_width; ++x)
+			{
+				for (int oy = -1; oy <= 1; ++oy)
+				{
+					for (int ox = -1; ox <= 1; ++ox)
+					{
+						if (ox == 0 && oy == 0)
+						{
+							continue;
+						}
+						NodePos adjacentNodes;
+						adjacentNodes = NodePos(currentNodePos.x + ox, currentNodePos.y + oy);
+
+						if (m_map.getNode(adjacentNodes).wall == true)
+						{
+							break;
+						}
+						else
+						{
+							validNodesList.push_back(currentNodePos);
+						}
+					}
+				}
+			}
+
+		}
+	}
 }
 
